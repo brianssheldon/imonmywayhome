@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World, ImOnMyWayHomeActivity!</string>
-    <string name="app_name">ImOnMyWayHome</string>
+    <string name="app_name">Im On My Way Home</string>
     <string name="messageLabel">Message to send</string>
     <string name="phoneNumberLabel">Phone to send message to</string>
     <string name="sendtextmessagelabel">Send</string>

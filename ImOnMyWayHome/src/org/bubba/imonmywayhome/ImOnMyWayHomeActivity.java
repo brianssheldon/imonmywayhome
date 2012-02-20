@@ -1,4 +1,4 @@
-package org.bubba;
+package org.bubba.imonmywayhome;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
