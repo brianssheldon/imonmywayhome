@@ -34,17 +34,20 @@ public class ImOnMyWayHomeActivity extends Activity
 
 	void populateScreen()
 	{
-		String record = readFile();
+		String record = readFile() + " , , , ";
 		
 		StringTokenizer st = new StringTokenizer(record, ",");
-
-		if(st.countTokens() < 1) st = new StringTokenizer(" , ", ",");
-		if(st.countTokens() < 2) st = new StringTokenizer(record, ",");
 		
 		EditText textText = (EditText) findViewById(R.id.editTextMessage);
 		textText.setText(st.nextToken().trim());
+
+		EditText phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber1);
+		phoneNumberView.setText(st.nextToken().trim());
 		
-		EditText phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber);
+		phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber2);
+		phoneNumberView.setText(st.nextToken().trim());
+		
+		phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber3);
 		phoneNumberView.setText(st.nextToken().trim());
 	}
     
@@ -55,27 +58,41 @@ public class ImOnMyWayHomeActivity extends Activity
 		{
 			EditText textText = (EditText) findViewById(R.id.editTextMessage);
 			String textmsg = textText.getText().toString();
+
+			EditText phoneNumberView1 = (EditText) findViewById(R.id.editTextPhoneNumber1);
+			String phoneNumber1 = phoneNumberView1.getText().toString();
 			
-			EditText phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber);
-			String phoneNumber = phoneNumberView.getText().toString();
+			EditText phoneNumberView2 = (EditText) findViewById(R.id.editTextPhoneNumber2);
+			String phoneNumber2 = phoneNumberView2.getText().toString();
 			
-			if(textmsg == null || "".equals(textmsg) 
-					|| phoneNumber == null || "".equals(phoneNumber))
-			{
-				return;
-			}
+			EditText phoneNumberView3 = (EditText) findViewById(R.id.editTextPhoneNumber3);
+			String phoneNumber3 = phoneNumberView3.getText().toString();
+
+			sendTextMessage(textmsg, phoneNumber1);
+			sendTextMessage(textmsg, phoneNumber2);
+			sendTextMessage(textmsg, phoneNumber3);
 			
-			SmsManager smsMgr = SmsManager.getDefault();
-			ArrayList<String> msgs = smsMgr.divideMessage(textmsg);
-			for (String string : msgs)
-			{
-				smsMgr.sendTextMessage(phoneNumber, null, string, null, null);
-			}
-			
-			saveFile(textmsg + "," + phoneNumber);
+			saveFile(textmsg + "," + phoneNumber1 + "," + phoneNumber2 + "," + phoneNumber3);
 		}
     };
-
+    
+    private void sendTextMessage(String message, String phoneNumber)
+    {
+    	if(message == null || "".equals(message) 
+    			|| phoneNumber == null || "".equals(phoneNumber))
+		{
+    		return;
+		}
+    	
+    	SmsManager smsMgr = SmsManager.getDefault();
+		ArrayList<String> msgs = smsMgr.divideMessage(message);
+		
+		for (String string : msgs)
+		{
+			smsMgr.sendTextMessage(phoneNumber, null, string, null, null);
+		}
+    }
+    
 	private void saveFile(String msgAndNumber)
 	{
 		try

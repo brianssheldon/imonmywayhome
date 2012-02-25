@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.bubba.imonmywayhome"
-    android:versionCode="7"
-    android:versionName="2.0" >
+    android:versionCode="14"
+    android:versionName="4.4" >
 
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="2" android:targetSdkVersion="2"/>
     
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-
+    <uses-permission android:name="android.permission.SEND_SMS" 
+        			 android:required="false"/>
+    
+	<supports-screens android:resizeable="true"
+                  android:smallScreens="true"
+                  android:normalScreens="true"
+                  android:largeScreens="true"
+                  android:anyDensity="true"/>
+	
     <application
         android:icon="@drawable/imonmywayhome"
-        android:label="@string/app_name" >
+        android:label="@string/app_name" 
+        android:debuggable="false">
         <activity
             android:name=".ImOnMyWayHomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
