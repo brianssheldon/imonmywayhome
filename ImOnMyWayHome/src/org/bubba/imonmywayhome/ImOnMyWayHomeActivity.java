@@ -38,7 +38,7 @@ public class ImOnMyWayHomeActivity extends Activity
 
 		Button theSaveButton = (Button) findViewById(R.id.saveButton);
 		theSaveButton.setOnClickListener(saveButtonClickListener);
-
+		
 		populateScreen();
 	}
 
@@ -47,12 +47,6 @@ public class ImOnMyWayHomeActivity extends Activity
 		String record = readFile() + " , , , , , , ";
 
 		StringTokenizer st = new StringTokenizer(record, ",");
-		
-		while (st.hasMoreElements())
-		{
-			System.err.println("*-*" + st.nextToken() + "*-*");
-		}
-		
 		
 		st = new StringTokenizer(record, ",");
 
@@ -72,14 +66,103 @@ public class ImOnMyWayHomeActivity extends Activity
 		if("Y".equals(st.nextToken().trim())) ((CheckBox)findViewById(R.id.checkBox2)).setChecked(true);
 		if("Y".equals(st.nextToken().trim())) ((CheckBox)findViewById(R.id.checkBox3)).setChecked(true);
 	}
+	
+	public void onCheckboxClicked(View view)
+	{
+	    boolean checked = ((CheckBox) view).isChecked();
+	    boolean showMsg = false;
+	    
+	    switch(view.getId()) 
+	    {
+	        case R.id.checkBox1:
+	            if (checked)
+	            {
+	            	if(isEditTextBlank(R.id.editTextPhoneNumber1))
+	        		{
+	        			showMsg = true;
+	        		}
+	            }
+	            break;
+	
+	        case R.id.checkBox2:
+	            if (checked)
+	            {
+	            	if(isEditTextBlank(R.id.editTextPhoneNumber2))
+	        		{
+	        			showMsg = true;
+	        		}
+	            }
+	            break;
+	
+	        case R.id.checkBox3:
+	            if (checked)
+	            {
+	            	if(isEditTextBlank(R.id.editTextPhoneNumber3))
+	        		{
+	        			showMsg = true;
+	        		}
+	            }
+	            break;
+	       }
+	    	
+	    	if(showMsg)
+	    	{
+	    		Toast.makeText(getBaseContext(), "Please enter a phone number\nbefore checking this box",
+    					Toast.LENGTH_SHORT).show();
+    			((CheckBox)view).setChecked(false);
+	    	}
+	}
+	
+	private boolean isEditTextBlank(int id)
+	{
+    	EditText phoneNumberView = (EditText) findViewById(id);
+		String phoneNumber = phoneNumberView.getText().toString();
+		
+		if(phoneNumber == null ||"".equals(phoneNumber))
+		{
+			return true;
+		}
+		return false;
+	}
 
 	private final Button.OnClickListener sendButtonClickListener = new Button.OnClickListener()
 	{
 		@Override
 		public void onClick(View arg0)
 		{
-			sendClicked = true;
+			if(isANumberChecked())
+			{
+				sendClicked = true;
+			}
+			else
+			{
+				Toast.makeText(getBaseContext(), "no phone numbers selected. \nno message sent", 
+                        Toast.LENGTH_SHORT).show();
+			}
+			
 			saveFile();
+		}
+
+		private boolean isANumberChecked()
+		{
+			if(isEditTextBlank(R.id.editTextPhoneNumber1))
+			{
+				((CheckBox)findViewById(R.id.checkBox1)).setChecked(false);
+			}
+
+			if(isEditTextBlank(R.id.editTextPhoneNumber2))
+			{
+				((CheckBox)findViewById(R.id.checkBox2)).setChecked(false);
+			}
+
+			if(isEditTextBlank(R.id.editTextPhoneNumber3))
+			{
+				((CheckBox)findViewById(R.id.checkBox3)).setChecked(false);
+			}
+			
+			return ((CheckBox)findViewById(R.id.checkBox1)).isChecked()
+				|| ((CheckBox)findViewById(R.id.checkBox2)).isChecked()
+				|| ((CheckBox)findViewById(R.id.checkBox3)).isChecked();
 		}
 	};
 

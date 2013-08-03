@@ -31,7 +31,8 @@
 	        android:id="@+id/checkBox1"
 	        android:layout_width="45dp"
 	        android:layout_marginLeft="20dp"
-	        android:layout_height="wrap_content" />
+	        android:layout_height="wrap_content"
+	        android:onClick="onCheckboxClicked"/>
 	
 	    <EditText
 	        android:id="@+id/editTextPhoneNumber1"
@@ -39,7 +40,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_toRightOf="@+id/checkBox1"
 	        android:ems="10"
-	        android:inputType="phone" >
+	        android:inputType="phone">
 	        <requestFocus />
 	    </EditText>
     </RelativeLayout>
@@ -52,7 +53,8 @@
 	        android:id="@+id/checkBox2"
 	        android:layout_width="45dp"
 	        android:layout_marginLeft="20dp"
-	        android:layout_height="wrap_content" />
+	        android:layout_height="wrap_content"
+	        android:onClick="onCheckboxClicked"/>
 	
 	    <EditText
 	        android:id="@+id/editTextPhoneNumber2"
@@ -73,7 +75,8 @@
 	        android:id="@+id/checkBox3"
 	        android:layout_width="45dp"
 	        android:layout_marginLeft="20dp"
-	        android:layout_height="wrap_content" />
+	        android:layout_height="wrap_content"
+	        android:onClick="onCheckboxClicked"/>
 	
 	    <EditText
 	        android:id="@+id/editTextPhoneNumber3"
