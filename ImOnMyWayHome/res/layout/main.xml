@@ -23,33 +23,92 @@
         android:layout_height="wrap_content"
         android:text="@string/phoneNumberLabel" />
 
-    <EditText
-        android:id="@+id/editTextPhoneNumber1"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone" />
+        android:layout_height="wrap_content" >
+        
+	    <CheckBox
+	        android:id="@+id/checkBox1"
+	        android:layout_width="45dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_height="wrap_content" />
+	
+	    <EditText
+	        android:id="@+id/editTextPhoneNumber1"
+	        android:layout_width="230dp"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@+id/checkBox1"
+	        android:ems="10"
+	        android:inputType="phone" >
+	        <requestFocus />
+	    </EditText>
+    </RelativeLayout>
 
-    <EditText
-        android:id="@+id/editTextPhoneNumber2"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone" />
-
-    <EditText
-        android:id="@+id/editTextPhoneNumber3"
+        android:layout_height="wrap_content" >
+        
+	    <CheckBox
+	        android:id="@+id/checkBox2"
+	        android:layout_width="45dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_height="wrap_content" />
+	
+	    <EditText
+	        android:id="@+id/editTextPhoneNumber2"
+	        android:layout_width="230dp"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@+id/checkBox2"
+	        android:ems="10"
+	        android:inputType="phone" >
+	        <requestFocus />
+	    </EditText>
+    </RelativeLayout>
+    
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="phone" />
+        android:layout_height="wrap_content" >
+        
+	    <CheckBox
+	        android:id="@+id/checkBox3"
+	        android:layout_width="45dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_height="wrap_content" />
+	
+	    <EditText
+	        android:id="@+id/editTextPhoneNumber3"
+	        android:layout_width="230dp"
+	        android:layout_height="wrap_content"
+	        android:layout_toRightOf="@+id/checkBox3"
+	        android:ems="10"
+	        android:inputType="phone" >
+	        <requestFocus />
+	    </EditText>
+    </RelativeLayout>
     
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/sendButton"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginLeft="25dp"
-        android:text="@string/sendtextmessagelabel" />
-
+    
+	<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+	
+	    <Button
+	        android:id="@+id/sendButton"
+	        android:layout_width="200dp"
+	        android:layout_height="200dp"
+	        android:layout_marginLeft="20dp"
+	        android:text="@string/sendtextmessagelabel" />
+	    
+	    <Button
+	        android:id="@+id/saveButton"
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+    	    android:layout_alignParentRight="true"
+    	    android:layout_marginRight="20dp"
+	        android:text="@string/save" />
+	
+	</RelativeLayout>
+		
 </LinearLayout>
