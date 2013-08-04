@@ -7,5 +7,7 @@
     <string name="phoneNumberLabel">Phone numbers to send message to</string>
     <string name="sendtextmessagelabel">Send</string>
     <string name="save">save</string>
+    <string name="edit">edit</string>
+    <string name="messages_to_send">Messages to send</string>
 
 </resources>

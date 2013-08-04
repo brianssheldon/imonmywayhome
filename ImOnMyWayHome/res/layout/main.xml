@@ -12,11 +12,33 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/messageLabel" />
-    <EditText
-        android:id="@+id/editTextMessage"
+
+    <Spinner
+        android:id="@+id/spinner1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text|textMultiLine" />
+        android:layout_height="50dp" />
+    
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    
+	    <EditText
+	        android:id="@+id/editTextMessage"
+	        android:layout_width="250dp"
+	        android:layout_height="wrap_content"
+	        android:inputType="text|textMultiLine" />
+		
+	    <Button
+	        android:id="@+id/editTextMsgsButton"
+	        android:layout_width="25dp"
+	        android:layout_height="50dp"
+    	    android:layout_alignParentRight="true"
+    	    android:layout_marginRight="20dp"
+	        android:text="@string/edit"
+	        android:layout_toRightOf="@+id/editTextMessage"
+	        android:onClick="editTextMessage"/>
+	    
+	</RelativeLayout>
     
     <TextView
         android:layout_width="fill_parent"
