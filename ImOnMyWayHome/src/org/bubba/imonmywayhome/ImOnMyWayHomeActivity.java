@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import android.app.Activity;
@@ -18,6 +17,8 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,7 +26,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class ImOnMyWayHomeActivity extends Activity
+public class ImOnMyWayHomeActivity extends AbstractActivity
 {
 	public static final String FILE_NAME = "imonmywayhomefile.txt";
 	private boolean sendClicked = false;
@@ -69,65 +70,44 @@ public class ImOnMyWayHomeActivity extends Activity
 		if("Y".equals(st.nextToken().trim())) ((CheckBox)findViewById(R.id.checkBox2)).setChecked(true);
 		if("Y".equals(st.nextToken().trim())) ((CheckBox)findViewById(R.id.checkBox3)).setChecked(true);
 		
-		
 		populateMessagesSpinner();
 	}
 
 	private void populateMessagesSpinner()
 	{
-		String msgsList = readMsgsFile();
-		
-		StringTokenizer st2 = new StringTokenizer(msgsList, ",");
-        
-	    Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+		MessagesBO msgsBO = readMsgsBO();
+		selectedMsgNbr = msgsBO.getSelectedMsgNbr();
 	
-	    List<String> list = new ArrayList<String>();
-	    while(st2.hasMoreElements())
-	    {
-	    	String msg = st2.nextToken().trim();
-	    	if(msg != null && msg.length() > 0) list.add(msg);
-	    }
-	
-	    ArrayAdapter dataAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, list);
+	    ArrayAdapter dataAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, msgsBO.getMsgs());
 	    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    
+	    Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 	    spinner.setAdapter(dataAdapter);
+	    spinner.setSelection(selectedMsgNbr);
+
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+			@Override
+			public void onItemSelected(AdapterView<?> parentView,
+					View selectedItemView, int position, long id)
+			{
+				selectedMsgNbr = position;
+				updateSpinnerSelection();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parentView)
+			{
+				// your code here
+			}
+
+		});
 	}
 	
-	private String readMsgsFile()
-	{
-		StringBuffer record = new StringBuffer();
-
-		try
-		{
-			int ch = 0;
-			FileInputStream fis = openFileInput(EditTextMessagesActivity.FILE_NAME);
-			while ((ch = fis.read()) != -1)
-			{
-				record.append((char) ch);
-			}
-			fis.close();
-		}
-		catch (FileNotFoundException e)
-		{
-			record.append(" , , , , , , , , , , , , , , , ");
-			saveFile(record.toString());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		if (record.length() == 0)
-		{
-			record.append(",");
-		}
-
-		return record.toString();
-	}
-
 	public void editTextMessage(View view)
 	{
         Intent myIntentx = new Intent(view.getContext(), EditTextMessagesActivity.class);
+//        myIntentx.putExtra("itemSelected", getSelectedSpinnerItemPosition());
         startActivityForResult(myIntentx, 100);
 	}
 	
@@ -175,6 +155,13 @@ public class ImOnMyWayHomeActivity extends Activity
     					Toast.LENGTH_SHORT).show();
     			((CheckBox)view).setChecked(false);
 	    	}
+	}
+	
+	private void updateSpinnerSelection()
+	{
+		MessagesBO msgsBO = readMsgsBO();
+		msgsBO.setSelectedMsgNbr(selectedMsgNbr);
+		saveNewMsgsBO(msgsBO);
 	}
 	
 	private boolean isEditTextBlank(int id)
@@ -241,6 +228,7 @@ public class ImOnMyWayHomeActivity extends Activity
 		@Override
 		public void onClick(View arg0)
 		{
+//			updateSpinnerSelection();
 			saveFile();
 		}
 	};

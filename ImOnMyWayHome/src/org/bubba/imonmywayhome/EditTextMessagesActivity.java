@@ -1,117 +1,62 @@
 package org.bubba.imonmywayhome;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.StringTokenizer;
-
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 
-public class EditTextMessagesActivity  extends Activity
-{
-	public static final String FILE_NAME = "imonmywayhomemessagesfile.txt";
+public class EditTextMessagesActivity  extends AbstractActivity
+{	
 	@Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edittextmessages);
-        
-        String theFile = readFile();
-        
-        StringTokenizer st = new StringTokenizer(theFile, ",");
-        
-        if(st.countTokens() > 7)
-        {
-        	((EditText) findViewById(R.id.editText1)).setText(st.nextToken().trim());
-        	((EditText) findViewById(R.id.editText2)).setText(st.nextToken().trim());
-        	((EditText) findViewById(R.id.editText3)).setText(st.nextToken().trim());
-        	((EditText) findViewById(R.id.editText4)).setText(st.nextToken().trim());
-        	((EditText) findViewById(R.id.editText5)).setText(st.nextToken().trim());
-        	((EditText) findViewById(R.id.editText6)).setText(st.nextToken().trim());
-        	((EditText) findViewById(R.id.editText7)).setText(st.nextToken().trim());
-        	((EditText) findViewById(R.id.editText8)).setText(st.nextToken().trim());
-        }
+		
+        populateScreen();
     }
-	
-	String readFile()
+
+	private void populateScreen()
 	{
-		StringBuffer record = new StringBuffer();
-
-		try
+		MessagesBO msgsBO = readMsgsBO();
+        int count = 1;
+        for (String msg : msgsBO.getMsgs())
 		{
-			int ch = 0;
-			FileInputStream fis = openFileInput(FILE_NAME);
-			while ((ch = fis.read()) != -1)
-			{
-				record.append((char) ch);
-			}
-			fis.close();
+        	((EditText) findViewById(getIdFromString(count))).setText(msg.trim());
+        	count += 1;
 		}
-		catch (FileNotFoundException e)
-		{
-			record.append(" , , , , , , , , , , , , , , , ");
-			saveFile(record.toString());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		if (record.length() == 0)
-		{
-			record.append(",");
-		}
-
-		return record.toString();
 	}
 	
-	private void saveFile()
+	int getIdFromString(int count)
 	{
-		StringBuffer sb = new StringBuffer();
-
-    	sb.append(((EditText) findViewById(R.id.editText1)).getText() + " , ");
-    	sb.append(((EditText) findViewById(R.id.editText2)).getText() + " , ");
-    	sb.append(((EditText) findViewById(R.id.editText3)).getText() + " , ");
-    	sb.append(((EditText) findViewById(R.id.editText4)).getText() + " , ");
-    	sb.append(((EditText) findViewById(R.id.editText5)).getText() + " , ");
-    	sb.append(((EditText) findViewById(R.id.editText6)).getText() + " , ");
-    	sb.append(((EditText) findViewById(R.id.editText7)).getText() + " , ");
-    	sb.append(((EditText) findViewById(R.id.editText8)).getText() + " , ");
+        String fieldId = "editText" + count;
+        int id = getResources().getIdentifier (fieldId, "id", getPackageName());
+        return id;
+	}
+	
+	void saveMsgsFile()
+	{
+		MessagesBO msgsBO = new MessagesBO();
+		
+		for (int i = 1; i < 9; i++)
+		{
+			msgsBO.getMsgs().add( ((EditText) findViewById(getIdFromString(i))).getText().toString().trim());	
+		}
+		
+		msgsBO.setSelectedMsgNbr(selectedMsgNbr);
 				
-		saveFile(sb.toString());
+		saveNewMsgsBO(msgsBO);
 	}
 	
-	private void saveFile(String msgAndNumber)
-	{
-		try
-		{
-			FileOutputStream fos = openFileOutput(FILE_NAME,
-					Context.MODE_PRIVATE);
-			fos.write(msgAndNumber.getBytes());
-			fos.close();
-		}
-		catch (Exception e)
-		{
-			Log.getStackTraceString(e);
-		}
-	}
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) 
 	{
-		saveFile();
+		saveMsgsFile();
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	protected void onPause()
 	{
-		saveFile();
+		saveMsgsFile();
 		super.onPause();
 	}
 }
