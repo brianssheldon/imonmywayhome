@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 public class EditTextMessagesActivity  extends AbstractActivity
-{	
+{
 	@Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -43,7 +43,7 @@ public class EditTextMessagesActivity  extends AbstractActivity
 		
 		msgsBO.setSelectedMsgNbr(selectedMsgNbr);
 				
-		saveNewMsgsBO(msgsBO);
+		saveMsgsBO(msgsBO);
 	}
 	
 	@Override

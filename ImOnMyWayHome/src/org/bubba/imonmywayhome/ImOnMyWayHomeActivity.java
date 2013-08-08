@@ -1,11 +1,6 @@
 package org.bubba.imonmywayhome;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -15,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -28,7 +22,6 @@ import android.widget.Toast;
 
 public class ImOnMyWayHomeActivity extends AbstractActivity
 {
-	public static final String FILE_NAME = "imonmywayhomefile.txt";
 	private boolean sendClicked = false;
 
 	@Override
@@ -48,34 +41,25 @@ public class ImOnMyWayHomeActivity extends AbstractActivity
 
 	void populateScreen()
 	{
-		String record = readFile() + " , , , , , , ";
-
-		StringTokenizer st = new StringTokenizer(record, ",");
-		
-		st = new StringTokenizer(record, ",");
-
-		EditText textText = (EditText) findViewById(R.id.editTextMessage);
-		textText.setText(st.nextToken().trim());
-
+		MessagesBO msgsBO = readMsgsBO();
 		EditText phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber1);
-		phoneNumberView.setText(st.nextToken().trim());
+		phoneNumberView.setText(msgsBO.getPhoneNumber1().trim());
 
 		phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber2);
-		phoneNumberView.setText(st.nextToken().trim());
+		phoneNumberView.setText(msgsBO.getPhoneNumber2().trim());
 
 		phoneNumberView = (EditText) findViewById(R.id.editTextPhoneNumber3);
-		phoneNumberView.setText(st.nextToken().trim());
+		phoneNumberView.setText(msgsBO.getPhoneNumber3().trim());
 		
-		if("Y".equals(st.nextToken().trim())) ((CheckBox)findViewById(R.id.checkBox1)).setChecked(true);
-		if("Y".equals(st.nextToken().trim())) ((CheckBox)findViewById(R.id.checkBox2)).setChecked(true);
-		if("Y".equals(st.nextToken().trim())) ((CheckBox)findViewById(R.id.checkBox3)).setChecked(true);
+		((CheckBox)findViewById(R.id.checkBox1)).setChecked(msgsBO.isPhoneNumberChecked1());
+		((CheckBox)findViewById(R.id.checkBox2)).setChecked(msgsBO.isPhoneNumberChecked2());
+		((CheckBox)findViewById(R.id.checkBox3)).setChecked(msgsBO.isPhoneNumberChecked3());
 		
-		populateMessagesSpinner();
+		populateMessagesSpinner(msgsBO);
 	}
 
-	private void populateMessagesSpinner()
+	private void populateMessagesSpinner(MessagesBO msgsBO)
 	{
-		MessagesBO msgsBO = readMsgsBO();
 		selectedMsgNbr = msgsBO.getSelectedMsgNbr();
 	
 	    ArrayAdapter dataAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, msgsBO.getMsgs());
@@ -161,7 +145,7 @@ public class ImOnMyWayHomeActivity extends AbstractActivity
 	{
 		MessagesBO msgsBO = readMsgsBO();
 		msgsBO.setSelectedMsgNbr(selectedMsgNbr);
-		saveNewMsgsBO(msgsBO);
+		saveMsgsBO(msgsBO);
 	}
 	
 	private boolean isEditTextBlank(int id)
@@ -216,12 +200,6 @@ public class ImOnMyWayHomeActivity extends AbstractActivity
 				|| ((CheckBox)findViewById(R.id.checkBox3)).isChecked();
 		}
 	};
-
-	private String cbToString(CheckBox cb)
-	{
-		if(cb.isChecked()) return "Y";
-		return "N";
-	}
 	
 	private final Button.OnClickListener saveButtonClickListener = new Button.OnClickListener()
 	{
@@ -311,79 +289,32 @@ public class ImOnMyWayHomeActivity extends AbstractActivity
 
 	private void saveFile()
 	{
-		EditText textText = (EditText) findViewById(R.id.editTextMessage);
-		String textmsg = textText.getText().toString();
+		MessagesBO msgsBO = readMsgsBO(); 
 
 		EditText phoneNumberView1 = (EditText) findViewById(R.id.editTextPhoneNumber1);
-		String phoneNumber1 = phoneNumberView1.getText().toString();
+		msgsBO.setPhoneNumber1(phoneNumberView1.getText().toString());
 
 		EditText phoneNumberView2 = (EditText) findViewById(R.id.editTextPhoneNumber2);
-		String phoneNumber2 = phoneNumberView2.getText().toString();
+		msgsBO.setPhoneNumber2(phoneNumberView2.getText().toString());
 
 		EditText phoneNumberView3 = (EditText) findViewById(R.id.editTextPhoneNumber3);
-		String phoneNumber3 = phoneNumberView3.getText().toString();
+		msgsBO.setPhoneNumber3(phoneNumberView3.getText().toString());
 
-		CheckBox cb1 = (CheckBox)findViewById(R.id.checkBox1);
-		CheckBox cb2 = (CheckBox)findViewById(R.id.checkBox2);
-		CheckBox cb3 = (CheckBox)findViewById(R.id.checkBox3);
+		msgsBO.setPhoneNumberChecked1(((CheckBox)findViewById(R.id.checkBox1)).isChecked());
+		msgsBO.setPhoneNumberChecked2(((CheckBox)findViewById(R.id.checkBox2)).isChecked());
+		msgsBO.setPhoneNumberChecked3(((CheckBox)findViewById(R.id.checkBox3)).isChecked());
 		
 		if(sendClicked)
 		{
-			if(cb1.isChecked())	sendTextMessage(textmsg, phoneNumber1);
-			if(cb2.isChecked())	sendTextMessage(textmsg, phoneNumber2);
-			if(cb3.isChecked())	sendTextMessage(textmsg, phoneNumber3);
+		    Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+			String textmsg = (String) spinner.getSelectedItem();
+			if(msgsBO.isPhoneNumberChecked1())	sendTextMessage(textmsg, msgsBO.getPhoneNumber1());
+			if(msgsBO.isPhoneNumberChecked2())	sendTextMessage(textmsg, msgsBO.getPhoneNumber2());
+			if(msgsBO.isPhoneNumberChecked3())	sendTextMessage(textmsg, msgsBO.getPhoneNumber3());
 			sendClicked = false;
 		}
 		
-		saveFile(textmsg + " ," + phoneNumber1 + " ," + phoneNumber2 + " ," + phoneNumber3
-			+ " ," + cbToString(cb1)+ " ," + cbToString(cb2)+ " ," + cbToString(cb3) + " ");
-	}
-	
-	private void saveFile(String msgAndNumber)
-	{
-		try
-		{
-			FileOutputStream fos = openFileOutput(FILE_NAME,
-					Context.MODE_PRIVATE);
-			fos.write(msgAndNumber.getBytes());
-			fos.close();
-		}
-		catch (Exception e)
-		{
-			Log.getStackTraceString(e);
-		}
-	}
-
-	private String readFile()
-	{
-		StringBuffer record = new StringBuffer();
-
-		try
-		{
-			int ch = 0;
-			FileInputStream fis = openFileInput(FILE_NAME);
-			while ((ch = fis.read()) != -1)
-			{
-				record.append((char) ch);
-			}
-			fis.close();
-		}
-		catch (FileNotFoundException e)
-		{
-			record.append(" , , , , , , , , , , , , , , , ");
-			saveFile(record.toString());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		if (record.length() == 0)
-		{
-			record.append(",");
-		}
-
-		return record.toString();
+		saveMsgsBO(msgsBO);
 	}
 	
 	@Override
@@ -393,7 +324,7 @@ public class ImOnMyWayHomeActivity extends AbstractActivity
 		
 		if(requestCode == 100)
 		{	// back from EditTextMessagesActivity
-			populateMessagesSpinner();
+			populateMessagesSpinner(readMsgsBO());
 		}
 	}
 }
