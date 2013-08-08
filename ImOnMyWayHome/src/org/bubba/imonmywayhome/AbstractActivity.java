@@ -71,13 +71,13 @@ public class AbstractActivity extends Activity
 		MessagesBO msgsBO;
 		msgsBO = new MessagesBO();
 		msgsBO.getMsgs().add("I'm on my way home.");
+		msgsBO.getMsgs().add("I'll be home after I stop by the store.");
+		msgsBO.getMsgs().add("");
+		msgsBO.getMsgs().add("42");
 		msgsBO.getMsgs().add("");
 		msgsBO.getMsgs().add("");
-		msgsBO.getMsgs().add("");
-		msgsBO.getMsgs().add("");
-		msgsBO.getMsgs().add("");
-		msgsBO.getMsgs().add("");
-		msgsBO.getMsgs().add("");
+		msgsBO.getMsgs().add("What is the last thing that goes through a bugs mind when it hits your windshield?");
+		msgsBO.getMsgs().add("It's butt");
 		msgsBO.setSelectedMsgNbr(0);
 		msgsBO.setPhoneNumber1("");
 		msgsBO.setPhoneNumber2("");

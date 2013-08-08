@@ -165,13 +165,22 @@ public class ImOnMyWayHomeActivity extends AbstractActivity
 		@Override
 		public void onClick(View arg0)
 		{
-			if(isANumberChecked())
+
+		    Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+			String textmsg = (String) spinner.getSelectedItem();
+			
+			if(textmsg == null || textmsg.length() < 1)
+			{
+				Toast.makeText(getBaseContext(), "message is blank\nno message sent", 
+                        Toast.LENGTH_SHORT).show();
+			}
+			else if(isANumberChecked())
 			{
 				sendClicked = true;
 			}
 			else
 			{
-				Toast.makeText(getBaseContext(), "no phone numbers selected. \nno message sent", 
+				Toast.makeText(getBaseContext(), "no phone numbers selected\nno message sent", 
                         Toast.LENGTH_SHORT).show();
 			}
 			
